@@ -1,0 +1,46 @@
+{
+  "snapshot_id": "fragmented-001",
+  "observed_at": "2026-10-15T12:00:00Z",
+  "scenario": "fragmented",
+  "nodes": [
+    {
+      "uid": "node-a",
+      "name": "worker-a",
+      "gpu_allocatable": 4,
+      "gpu_requested": 2,
+      "zone": "demo-zone-a"
+    },
+    {
+      "uid": "node-b",
+      "name": "worker-b",
+      "gpu_allocatable": 4,
+      "gpu_requested": 2,
+      "zone": "demo-zone-a"
+    }
+  ],
+  "workloads": [
+    {
+      "uid": "train-a",
+      "name": "training-a",
+      "phase": "Running",
+      "gpu_request": 2,
+      "node_uid": "node-a"
+    },
+    {
+      "uid": "train-b",
+      "name": "training-b",
+      "phase": "Running",
+      "gpu_request": 2,
+      "node_uid": "node-b"
+    },
+    {
+      "uid": "pending",
+      "name": "training-large",
+      "phase": "Pending",
+      "gpu_request": 4
+    }
+  ],
+  "warnings": [
+    "Synthetic scenario time; no live GPU measurements. All nodes eligible for this simplified count analysis."
+  ]
+}

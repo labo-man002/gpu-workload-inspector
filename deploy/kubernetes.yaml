@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpu-inspector
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: gpu-inspector}
+  template:
+    metadata:
+      labels: {app: gpu-inspector}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: app
+          image: gpu-inspector:dev
+          imagePullPolicy: IfNotPresent
+          ports: [{containerPort: 8000}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          readinessProbe:
+            httpGet: {path: /readyz, port: 8000}
+          livenessProbe:
+            httpGet: {path: /healthz, port: 8000}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+            seccompProfile: {type: RuntimeDefault}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gpu-inspector
+spec:
+  selector: {app: gpu-inspector}
+  ports: [{port: 8000, targetPort: 8000}]
